@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Contacts Form Captcha
+ *
+ * @category    OlegKoval
+ * @package     OlegKoval_ContactsFormCaptcha
+ * @copyright   Copyright (c) 2012 Oleg Koval
+ * @author      Oleg Koval <oleh.koval@gmail.com>
+ */
+-->
+<layout version="0.1.0">
+    <contactsformcaptcha_index_index translate="label">
+        <label>Contact Us Form</label>
+        <reference name="head">
+            <action method="setTitle" translate="title" module="contacts"><title>Contact Us</title></action>
+        </reference>
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+            <action method="setHeaderTitle" translate="title" module="contacts"><title>Contact Us</title></action>
+        </reference>
+        <reference name="content">
+            <block type="core/template" name="contactsFormCaptcha" template="contactsformcaptcha/form.phtml"/>
+        </reference>
+    </contactsformcaptcha_index_index>
+</layout>
