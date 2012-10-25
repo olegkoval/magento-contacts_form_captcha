@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Contacts Form Captcha
+ *
+ * @category    OlegKoval
+ * @package     OlegKoval_ContactsFormCaptcha
+ * @copyright   Copyright (c) 2012 Oleg Koval
+ * @author      Oleg Koval <oleh.koval@gmail.com>
+ */
+-->
+<config>
+	<modules>
+		<OlegKoval_ContactsFormCaptcha>
+			<active>true</active>
+			<codePool>community</codePool>
+		</OlegKoval_ContactsFormCaptcha>
+	</modules>
+</config>

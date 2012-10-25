@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Contacts Form Captcha
+ *
+ * @category    OlegKoval
+ * @package     OlegKoval_ContactsFormCaptcha
+ * @copyright   Copyright (c) 2012 Oleg Koval
+ * @author      Oleg Koval <oleh.koval@gmail.com>
+ */
+-->
+<config>
+	<modules>
+		<OlegKoval_ContactsFormCaptcha>
+			<version>1.0.0</version>
+			<depends>
+				<Mage_Contacts/>
+			</depends>
+		</OlegKoval_ContactsFormCaptcha>
+	</modules>
+
+    <global>
+        <blocks>
+          <contactsformcaptcha>
+            <class>OlegKoval_ContactsFormCaptcha_Block</class>
+          </contactsformcaptcha> 
+        </blocks>
+    </global>
+
+	<frontend>
+		<routers>
+            <contacts>
+                <args>
+                    <modules>
+                        <contactsformcaptcha before="Mage_Customer">OlegKoval_ContactsFormCaptcha</contactsformcaptcha>
+                    </modules>
+                </args>
+            </contacts>
+        </routers>
+	</frontend>
+</config>
