@@ -14,6 +14,8 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
     const XML_PATH_CFC_ENABLED     = 'contacts/olegkoval_contactsformcaptcha/enabled';
     const XML_PATH_CFC_PUBLIC_KEY  = 'contacts/olegkoval_contactsformcaptcha/public_key';
     const XML_PATH_CFC_PRIVATE_KEY = 'contacts/olegkoval_contactsformcaptcha/private_key';
+    const XML_PATH_CFC_THEME       = 'contacts/olegkoval_contactsformcaptcha/theme';
+    const XML_PATH_CFC_LANG        = 'contacts/olegkoval_contactsformcaptcha/lang';
 
     /**
      * Check if "Contacts Form Captcha" is enabled
@@ -36,7 +38,25 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
             $publickey = Mage::getStoreConfig(self::XML_PATH_CFC_PUBLIC_KEY);
             $captcha_code = recaptcha_get_html($publickey);
 
-            $this->getLayout()->getBlock('contactForm')->setTemplate('contactsformcaptcha/form.phtml')->setFormAction(Mage::getUrl('*/*/post'))->setCaptchaCode($captcha_code);
+            //get reCaptcha theme name
+            $theme = Mage::getStoreConfig(self::XML_PATH_CFC_THEME);
+            if (strlen($theme) == 0 || !in_array($theme, array('red', 'white', 'blackglass', 'clean'))) {
+                $theme = 'red';
+            }
+
+            //get reCaptcha lang name
+            $lang = Mage::getStoreConfig(self::XML_PATH_CFC_LANG);
+            if (strlen($lang) == 0 || !in_array($lang, array('en', 'nl', 'fr', 'de', 'pt', 'ru', 'es', 'tr'))) {
+                $lang = 'en';
+            }
+            //small hack for language feature - because it's not working as described in documentation
+            $captcha_code = str_replace('?k=', '?hl='. $lang .'&amp;k=', $captcha_code);
+
+            $this->getLayout()->getBlock('contactForm')->setTemplate('contactsformcaptcha/form.phtml')
+                                                        ->setFormAction(Mage::getUrl('*/*/post'))
+                                                        ->setCaptchaCode($captcha_code)
+                                                        ->setCaptchaTheme($theme)
+                                                        ->setCaptchaLang($lang);
         }
         else {
             $this->getLayout()->getBlock('contactForm')->setFormAction(Mage::getUrl('*/*/post'));

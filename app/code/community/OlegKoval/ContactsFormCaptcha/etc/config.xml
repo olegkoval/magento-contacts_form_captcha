@@ -25,6 +25,12 @@
             <class>OlegKoval_ContactsFormCaptcha_Block</class>
           </contactsformcaptcha> 
         </blocks>
+
+        <models>
+            <contactsformcaptcha>
+                <class>OlegKoval_ContactsFormCaptcha_Model</class>
+            </contactsformcaptcha>
+        </models>
     </global>
 
 	<frontend>

@@ -28,6 +28,14 @@
 <div class="page-title">
     <h1><?php echo Mage::helper('contacts')->__('Contact Us') ?></h1>
 </div>
+<script type="text/javascript">
+//<![CDATA[
+    var RecaptchaOptions = {
+        theme : '<?php echo $this->getCaptchaTheme(); ?>',
+        lang : '<?php echo $this->getCaptchaLang(); ?>',
+    };
+//]]>
+</script>
 <form action="<?php echo $this->getFormAction(); ?>" id="contactForm" method="post">
     <div class="fieldset">
         <h2 class="legend"><?php echo Mage::helper('contacts')->__('Contact Information') ?></h2>
