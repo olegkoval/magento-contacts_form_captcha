@@ -85,7 +85,7 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
                     $captcha = recaptcha_check_answer($privatekey, $remote_addr, $post["recaptcha_challenge_field"], $post["recaptcha_response_field"]);
 
                     if (!$captcha->is_valid) {
-                        throw new Exception("The reCAPTCHA wasn't entered correctly. Go back and try it again.", 1);
+                        throw new Exception($this->__("The reCAPTCHA wasn't entered correctly. Go back and try it again."), 1);
                     }
                 }
                 else {
