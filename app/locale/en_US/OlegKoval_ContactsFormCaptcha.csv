@@ -2,5 +2,7 @@
 "Enable Captcha","Enable Captcha"
 "Public Key","Public Key"
 "Private Key","Private Key"
+"reCaptcha Theme","reCaptcha Theme"
+"reCaptcha Language","reCaptcha Language"
 "You got this from the signup page: https://www.google.com/recaptcha/admin/create","You got this from the signup page: https://www.google.com/recaptcha/admin/create"
 "The reCAPTCHA wasn't entered correctly. Go back and try it again.","The reCAPTCHA wasn't entered correctly. Go back and try it again."

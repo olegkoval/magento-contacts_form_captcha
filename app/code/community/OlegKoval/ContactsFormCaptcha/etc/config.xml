@@ -52,5 +52,17 @@
                 </OlegKoval_ContactsFormCaptcha>                                                                                                                
             </modules>                                                                                                                                
         </translate>
-	</frontend>
+    </frontend>
+    
+    <adminhtml>
+        <translate>                                                                                                                                   
+            <modules>                                                                                                                                 
+                <OlegKoval_ContactsFormCaptcha>                                                                                                                 
+                    <files>                                                                                                                           
+                        <default>OlegKoval_ContactsFormCaptcha.csv</default>                                                                                    
+                    </files>                                                                                                                          
+                </OlegKoval_ContactsFormCaptcha>                                                                                                                
+            </modules>                                                                                                                                
+        </translate>
+	</adminhtml>
 </config>
