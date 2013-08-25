@@ -10,17 +10,11 @@
  */
 -->
 <layout version="0.1.0">
-    <contactsformcaptcha_index_index translate="label">
-        <label>Contact Us Form</label>
-        <reference name="head">
-            <action method="setTitle" translate="title" module="contacts"><title>Contact Us</title></action>
-        </reference>
-        <reference name="root">
-            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
-            <action method="setHeaderTitle" translate="title" module="contacts"><title>Contact Us</title></action>
-        </reference>
+    <contacts_index_index>
         <reference name="content">
-            <block type="core/template" name="contactsFormCaptcha" template="contactsformcaptcha/form.phtml"/>
+            <reference name="contactForm">
+                <action method="setTemplate"><template>contactsformcaptcha/form.phtml</template></action>
+            </reference>
         </reference>
-    </contactsformcaptcha_index_index>
+    </contacts_index_index>
 </layout>

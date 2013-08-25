@@ -12,7 +12,7 @@
 <config>
 	<modules>
 		<OlegKoval_ContactsFormCaptcha>
-			<version>1.2.0</version>
+			<version>1.3.0</version>
 			<depends>
 				<Mage_Contacts/>
 			</depends>
@@ -52,6 +52,13 @@
                 </OlegKoval_ContactsFormCaptcha>                                                                                                                
             </modules>                                                                                                                                
         </translate>
+        <layout>
+            <updates>
+                <contactsformcaptcha module="OlegKoval_ContactsFormCaptcha">
+                    <file>contactsformcaptcha.xml</file>
+                </contactsformcaptcha>
+            </updates>
+        </layout>
     </frontend>
     
     <adminhtml>

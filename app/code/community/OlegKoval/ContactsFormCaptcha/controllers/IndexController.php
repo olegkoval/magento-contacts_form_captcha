@@ -30,6 +30,8 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
     public function indexAction() {
         $this->loadLayout();
 
+        $this->getLayout()->getBlock('contactForm')->setFormAction(Mage::getUrl('*/*/post'));
+
         if (Mage::getStoreConfigFlag(self::XML_PATH_CFC_ENABLED)) {
             //include reCaptcha library
             require_once(Mage::getBaseDir('lib') . DS .'reCaptcha'. DS .'recaptchalib.php');
@@ -52,14 +54,9 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
             //small hack for language feature - because it's not working as described in documentation
             $captcha_code = str_replace('?k=', '?hl='. $lang .'&amp;k=', $captcha_code);
 
-            $this->getLayout()->getBlock('contactForm')->setTemplate('contactsformcaptcha/form.phtml')
-                                                        ->setFormAction(Mage::getUrl('*/*/post'))
-                                                        ->setCaptchaCode($captcha_code)
+            $this->getLayout()->getBlock('contactForm')->setCaptchaCode($captcha_code)
                                                         ->setCaptchaTheme($theme)
                                                         ->setCaptchaLang($lang);
-        }
-        else {
-            $this->getLayout()->getBlock('contactForm')->setFormAction(Mage::getUrl('*/*/post'));
         }
 
         $this->_initLayoutMessages('customer/session');
@@ -75,6 +72,10 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
         if (Mage::getStoreConfigFlag(self::XML_PATH_CFC_ENABLED)) {
             try {
                 $post = $this->getRequest()->getPost();
+                $formData = new Varien_Object();
+                $formData->setData($post);
+                Mage::getSingleton('core/session')->setData('contactForm', $formData);
+
                 if ($post) {
                     //include reCaptcha library
                     require_once(Mage::getBaseDir('lib') . DS .'reCaptcha'. DS .'recaptchalib.php');
@@ -87,6 +88,8 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
                     if (!$captcha->is_valid) {
                         throw new Exception($this->__("The reCAPTCHA wasn't entered correctly. Go back and try it again."), 1);
                     }
+
+                    Mage::getSingleton('core/session')->unsetData('contactForm');
                 }
                 else {
                     throw new Exception('', 1);
