@@ -38,7 +38,7 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
             
             //create captcha html-code
             $publickey = Mage::getStoreConfig(self::XML_PATH_CFC_PUBLIC_KEY);
-            $captcha_code = recaptcha_get_html($publickey);
+            $captcha_code = recaptcha_get_html($publickey, null, Mage::app()->getStore()->isCurrentlySecure());
 
             //get reCaptcha theme name
             $theme = Mage::getStoreConfig(self::XML_PATH_CFC_THEME);
