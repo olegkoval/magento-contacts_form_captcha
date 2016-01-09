@@ -32,7 +32,7 @@
                             <show_in_store>1</show_in_store>
                         </enabled>
                         <public_key translate="label">
-                            <label>Public Key</label>
+                            <label>Site Key</label>
                             <comment>You got this from the signup page: https://www.google.com/recaptcha/admin/create</comment>
                             <frontend_type>text</frontend_type>
                             <sort_order>20</sort_order>
@@ -41,7 +41,7 @@
                             <show_in_store>1</show_in_store>
                         </public_key>
                         <private_key translate="label">
-                            <label>Private Key</label>
+                            <label>Secret Key</label>
                             <comment>You got this from the signup page: https://www.google.com/recaptcha/admin/create</comment>
                             <frontend_type>text</frontend_type>
                             <sort_order>30</sort_order>
