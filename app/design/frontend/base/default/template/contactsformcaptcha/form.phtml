@@ -33,13 +33,15 @@
 <div class="page-title">
     <h1><?php echo Mage::helper('contacts')->__('Contact Us') ?></h1>
 </div>
+<script src="https://www.google.com/recaptcha/api.js?onload=renderReCaptcha&render=explicit" async defer></script>
 <script type="text/javascript">
-//<![CDATA[
-    var RecaptchaOptions = {
-        theme : '<?php echo $this->getCaptchaTheme(); ?>',
-        lang : '<?php echo $this->getCaptchaLang(); ?>',
-    };
-//]]>
+    function renderReCaptcha() {
+        grecaptcha.render('re_captcha', {
+          sitekey: '<?php echo $this->getSiteKey(); ?>',
+          theme: '<?php echo $this->getCaptchaTheme(); ?>',
+          lang: '<?php echo $this->getCaptchaLang(); ?>'
+        });
+    }
 </script>
 <form action="<?php echo $this->getFormAction(); ?>" id="contactForm" method="post">
     <div class="fieldset">
@@ -73,7 +75,7 @@
             </li>
             <li class="wide">
                 <div class="input-box">
-                    <?php echo $this->getCaptchaCode(); ?>
+                    <div id="re_captcha"></div>
                 </div>
             </li>
         </ul>

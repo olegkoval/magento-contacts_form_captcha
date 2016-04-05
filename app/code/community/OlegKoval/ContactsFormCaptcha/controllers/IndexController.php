@@ -4,7 +4,7 @@
  *
  * @category    OlegKoval
  * @package     OlegKoval_ContactsFormCaptcha
- * @copyright   Copyright (c) 2012 Oleg Koval
+ * @copyright   Copyright (c) 2012 - 2016 Oleg Koval
  * @author      Oleg Koval <oleh.koval@gmail.com>
  */
 //include controller to override it
@@ -18,7 +18,7 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
     const XML_PATH_CFC_LANG        = 'contacts/olegkoval_contactsformcaptcha/lang';
 
     /**
-     * Check if "Contacts Form Captcha" is enabled
+     * @see parent::preDispatch
      */
     public function preDispatch() {
         parent::preDispatch();
@@ -33,17 +33,13 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
         $this->getLayout()->getBlock('contactForm')->setFormAction(Mage::getUrl('*/*/post'));
 
         if (Mage::getStoreConfigFlag(self::XML_PATH_CFC_ENABLED)) {
-            //include reCaptcha library
-            require_once(Mage::getBaseDir('lib') . DS .'reCaptcha'. DS .'recaptchalib.php');
-            
             //create captcha html-code
-            $publickey = Mage::getStoreConfig(self::XML_PATH_CFC_PUBLIC_KEY);
-            $captcha_code = recaptcha_get_html($publickey, null, Mage::app()->getStore()->isCurrentlySecure());
+            $siteKey = Mage::getStoreConfig(self::XML_PATH_CFC_PUBLIC_KEY);
 
             //get reCaptcha theme name
             $theme = Mage::getStoreConfig(self::XML_PATH_CFC_THEME);
-            if (strlen($theme) == 0 || !in_array($theme, array('red', 'white', 'blackglass', 'clean'))) {
-                $theme = 'red';
+            if (strlen($theme) == 0 || !in_array($theme, array('dark', 'light'))) {
+                $theme = 'light';
             }
 
             //get reCaptcha lang name
@@ -51,10 +47,8 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
             if (strlen($lang) == 0 || !in_array($lang, array('en', 'nl', 'fr', 'de', 'pt', 'ru', 'es', 'tr'))) {
                 $lang = 'en';
             }
-            //small hack for language feature - because it's not working as described in documentation
-            $captcha_code = str_replace('?k=', '?hl='. $lang .'&amp;k=', $captcha_code);
 
-            $this->getLayout()->getBlock('contactForm')->setCaptchaCode($captcha_code)
+            $this->getLayout()->getBlock('contactForm')->setSiteKey($siteKey)
                                                         ->setCaptchaTheme($theme)
                                                         ->setCaptchaLang($lang);
         }
@@ -66,7 +60,6 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
 
     /**
      * Handle post request of Contact form
-     * @return [type] [description]
      */
     public function postAction() {
         if (Mage::getStoreConfigFlag(self::XML_PATH_CFC_ENABLED)) {
@@ -77,15 +70,7 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
                 Mage::getSingleton('core/session')->setData('contactForm', $formData);
 
                 if ($post) {
-                    //include reCaptcha library
-                    require_once(Mage::getBaseDir('lib') . DS .'reCaptcha'. DS .'recaptchalib.php');
-                    
-                    //validate captcha
-                    $privatekey = Mage::getStoreConfig(self::XML_PATH_CFC_PRIVATE_KEY);
-                    $remote_addr = $this->getRequest()->getServer('REMOTE_ADDR');
-                    $captcha = recaptcha_check_answer($privatekey, $remote_addr, $post["recaptcha_challenge_field"], $post["recaptcha_response_field"]);
-
-                    if (!$captcha->is_valid) {
+                    if (!isset($post['g-recaptcha-response']) || !$this->isCaptchaValid($post['g-recaptcha-response'])) {
                         throw new Exception($this->__("The reCAPTCHA wasn't entered correctly. Go back and try it again."), 1);
                     }
 
@@ -106,5 +91,41 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
 
         //everything is OK - call parent action
         parent::postAction();
+    }
+
+    /**
+     * Check if captcha is valid
+     * @param  string $captchaResponse
+     * @return boolean
+     */
+    private function isCaptchaValid($captchaResponse) {
+        $result = false;
+
+        $params = array(
+            'secret' => Mage::getStoreConfig(self::XML_PATH_CFC_PRIVATE_KEY),
+            'response' => $captchaResponse
+        );
+
+        $ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1) ;
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+        curl_setopt($ch, CURLOPT_VERBOSE, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        $requestResult = trim(curl_exec($ch));
+        curl_close($ch);
+
+        if (is_array(json_decode($requestResult, true))) {
+            $response = json_decode($requestResult, true);
+
+            if (isset($response['success']) && $response['success'] === true) {
+                $result = true;
+            }
+        }
+
+        return $result;
     }
 }
