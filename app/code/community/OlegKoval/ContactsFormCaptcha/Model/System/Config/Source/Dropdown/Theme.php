@@ -7,12 +7,14 @@
  * @copyright   Copyright (c) 2012 - 2016 Oleg Koval
  * @author      Oleg Koval <oleh.koval@gmail.com>
  */
-class OlegKoval_ContactsFormCaptcha_Model_System_Config_Source_Dropdown_Theme {
+class OlegKoval_ContactsFormCaptcha_Model_System_Config_Source_Dropdown_Theme
+{
     /**
      * Generate theme options array
      * @return array
      */
-    public function toOptionArray() {
+    public function toOptionArray()
+    {
         return array(
             array(
                 'value' => 'light',
@@ -21,7 +23,7 @@ class OlegKoval_ContactsFormCaptcha_Model_System_Config_Source_Dropdown_Theme {
             array(
                 'value' => 'dark',
                 'label' => 'Dark',
-            ),
+            )
         );
     }
 }

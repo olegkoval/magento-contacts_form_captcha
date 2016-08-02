@@ -7,12 +7,14 @@
  * @copyright   Copyright (c) 2012 - 2016 Oleg Koval
  * @author      Oleg Koval <oleh.koval@gmail.com>
  */
-class OlegKoval_ContactsFormCaptcha_Model_System_Config_Source_Dropdown_Lang {
+class OlegKoval_ContactsFormCaptcha_Model_System_Config_Source_Dropdown_Lang
+{
     /**
      * Generate lang options array
      * @return array
      */
-    public function toOptionArray() {
+    public function toOptionArray()
+    {
         return array(
             array(
                 'value' => 'en',
@@ -45,7 +47,7 @@ class OlegKoval_ContactsFormCaptcha_Model_System_Config_Source_Dropdown_Lang {
             array(
                 'value' => 'tr',
                 'label' => 'Turkish',
-            ),
+            )
         );
     }
 }

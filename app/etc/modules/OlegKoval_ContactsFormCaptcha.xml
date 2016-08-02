@@ -10,10 +10,10 @@
  */
 -->
 <config>
-	<modules>
-		<OlegKoval_ContactsFormCaptcha>
-			<active>true</active>
-			<codePool>community</codePool>
-		</OlegKoval_ContactsFormCaptcha>
-	</modules>
+    <modules>
+        <OlegKoval_ContactsFormCaptcha>
+            <active>true</active>
+            <codePool>community</codePool>
+        </OlegKoval_ContactsFormCaptcha>
+    </modules>
 </config>

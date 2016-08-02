@@ -8,9 +8,14 @@
  * @author      Oleg Koval <oleh.koval@gmail.com>
  */
 //include controller to override it
-require_once(Mage::getBaseDir('app') . DS .'code'. DS .'core'. DS .'Mage'. DS .'Contacts'. DS .'controllers'. DS .'IndexController.php');
+require_once Mage::getBaseDir('app') . DS . 'code' . DS . 'core' . DS . 'Mage' . DS . 'Contacts' . DS . 'controllers' . DS . 'IndexController.php';
 
-class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexController {
+class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexController
+{
+    /**
+     * XML system configuration paths
+     * @var string
+     */
     const XML_PATH_CFC_ENABLED     = 'contacts/olegkoval_contactsformcaptcha/enabled';
     const XML_PATH_CFC_PUBLIC_KEY  = 'contacts/olegkoval_contactsformcaptcha/public_key';
     const XML_PATH_CFC_PRIVATE_KEY = 'contacts/olegkoval_contactsformcaptcha/private_key';
@@ -18,16 +23,10 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
     const XML_PATH_CFC_LANG        = 'contacts/olegkoval_contactsformcaptcha/lang';
 
     /**
-     * @see parent::preDispatch
-     */
-    public function preDispatch() {
-        parent::preDispatch();
-    }
-
-    /**
      * Method which handle action of displaying contact form
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->loadLayout();
 
         $this->getLayout()->getBlock('contactForm')->setFormAction(Mage::getUrl('*/*/post'));
@@ -48,9 +47,10 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
                 $lang = 'en';
             }
 
-            $this->getLayout()->getBlock('contactForm')->setSiteKey($siteKey)
-                                                        ->setCaptchaTheme($theme)
-                                                        ->setCaptchaLang($lang);
+            $this->getLayout()->getBlock('contactForm')
+                ->setSiteKey($siteKey)
+                ->setCaptchaTheme($theme)
+                ->setCaptchaLang($lang);
         }
 
         $this->_initLayoutMessages('customer/session');
@@ -61,7 +61,8 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
     /**
      * Handle post request of Contact form
      */
-    public function postAction() {
+    public function postAction()
+    {
         if (Mage::getStoreConfigFlag(self::XML_PATH_CFC_ENABLED)) {
             try {
                 $post = $this->getRequest()->getPost();
@@ -70,17 +71,20 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
                 Mage::getSingleton('core/session')->setData('contactForm', $formData);
 
                 if ($post) {
-                    if (!isset($post['g-recaptcha-response']) || !$this->isCaptchaValid($post['g-recaptcha-response'])) {
-                        throw new Exception($this->__("The reCAPTCHA wasn't entered correctly. Go back and try it again."), 1);
+                    if ((!isset($post['g-recaptcha-response']))
+                        || (!$this->_isCaptchaValid($post['g-recaptcha-response']))
+                    ) {
+                        throw new Exception(
+                            $this->__("The reCAPTCHA wasn't entered correctly. Go back and try it again."),
+                            1
+                        );
                     }
 
                     Mage::getSingleton('core/session')->unsetData('contactForm');
-                }
-                else {
+                } else {
                     throw new Exception('', 1);
                 }
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 if (strlen($e->getMessage()) > 0) {
                     Mage::getSingleton('customer/session')->addError($this->__($e->getMessage()));
                 }
@@ -98,7 +102,8 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
      * @param  string $captchaResponse
      * @return boolean
      */
-    private function isCaptchaValid($captchaResponse) {
+    protected function _isCaptchaValid($captchaResponse)
+    {
         $result = false;
 
         $params = array(
@@ -107,7 +112,7 @@ class OlegKoval_ContactsFormCaptcha_IndexController extends Mage_Contacts_IndexC
         );
 
         $ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1) ;
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
